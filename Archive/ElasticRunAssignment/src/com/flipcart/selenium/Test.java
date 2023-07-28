@@ -95,9 +95,15 @@ public class Test {
 
 		//Adding Thread.sleep to enter OTP Manually
 		//Thread.sleep(20000);
-		explicitlyWait(driver.findElement(mobileSection));
-		// click on Mobile Section
-		driver.findElement(mobileSection).click();
+		try {
+			explicitlyWait(driver.findElement(mobileSection));
+			// click on Mobile Section
+			driver.findElement(mobileSection).click();
+		} catch (Exception e) {
+			explicitlyWait(driver.findElement(By.xpath("//span[text()='Mobiles']")));
+			// click on Mobile Section
+			driver.findElement(By.xpath("//span[text()='Mobiles']")).click();
+		}
 		
 		//wait for mobile in left pane
 		explicitlyWait(driver.findElement(mobileCategoryFromLeftPane));
@@ -143,14 +149,15 @@ public class Test {
 		driver.findElement(cartBasket).click();
 	
 		
+		//adding extra wait time as it takes lot of time to load/
+		Thread.sleep(10000);
 		//explicit wait
 		explicitlyWait(driver.findElement(noOfCartItems));
 		//we should avoid this after creating some reusable method to wait for page load
-		//adding extra wait time as it takes lot of time to load/
-		Thread.sleep(10000);
+		
 		
 		//Validate cart Number
-		int cartNumber = Integer.parseInt(driver.findElement(noOfCartItems).getText());
+		int cartNumber = Integer.parseInt(driver.findElement(noOfCartItems).getText().split(" ")[1].replace("(", "").replace(")", "").trim());
 		Assert.isTrue(noOfItemsToAdd==cartNumber, "No of Items We wanted to add is not matchin with no of cart items");
 		
 		
